@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HUBHUG</title>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GB86JEEHNY"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-GB86JEEHNY');
+  </script>
+
+  <!-- html2canvas (save image) -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+  <style>
+    :root{
+      --red: #E53935;
+      --pink: #FF5A8A;
+      --pink2: #FF89AE;
+      --softPink: #FFE3EC;
+      --white: #FFFFFF;
+      --text: #232323;
+      --shadow: 0 16px 46px rgba(0,0,0,0.14);
+    }
+
+    *{ box-sizing: border-box; }
+
+    body{
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Thai", Arial, sans-serif;
+      color: var(--text);
+
+      /* Cozy warm pink/red */
+      background:
+        radial-gradient(900px 700px at 20% 10%, rgba(255,255,255,0.95), rgba(255,227,236,0.72)),
+        radial-gradient(900px 700px at 85% 25%, rgba(255,90,138,0.40), rgba(255,255,255,0.0)),
+        radial-gradient(900px 700px at 30% 90%, rgba(229,57,53,0.22), rgba(255,255,255,0.0)),
+        linear-gradient(160deg, #fff 0%, #ffe3ec 40%, #ffd1e1 100%);
+
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+
+    .wrap{
+      width: 100%;
+      max-width: 430px;
+    }
+
+    /* -------- Result card (portrait) -------- */
+    .story-frame{
+      width: 100%;
+      aspect-ratio: 9 / 16;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      position: relative;
+
+      background:
+        radial-gradient(900px 700px at 20% 15%, rgba(255,255,255,0.95), rgba(255,255,255,0.15)),
+        radial-gradient(900px 700px at 80% 25%, rgba(255,90,138,0.46), rgba(255,255,255,0.0)),
+        radial-gradient(900px 700px at 35% 90%, rgba(229,57,53,0.28), rgba(255,255,255,0.0)),
+        linear-gradient(165deg, rgba(229,57,53,0.40), rgba(255,90,138,0.26)),
+        #fff;
+
+      border: 1px solid rgba(229,57,53,0.14);
+    }
+
+    /* subtle hearts pattern */
+    .story-frame::before{
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.18;
+      background-image:
+        radial-gradient(circle at 15% 20%, rgba(255,90,138,0.30) 0 2px, transparent 3px),
+        radial-gradient(circle at 75% 25%, rgba(229,57,53,0.25) 0 2px, transparent 3px),
+        radial-gradient(circle at 35% 70%, rgba(255,90,138,0.22) 0 2px, transparent 3px),
+        radial-gradient(circle at 85% 78%, rgba(229,57,53,0.18) 0 2px, transparent 3px);
+      background-size: 220px 220px;
+    }
+
+    .top-badge{
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 14px;
+      background: rgba(255,255,255,0.78);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,90,138,0.25);
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      z-index: 2;
+    }
+
+    .dot{
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--red), var(--pink));
+      box-shadow: 0 8px 18px rgba(229,57,53,0.35);
+    }
+
+    .center{
+      height: 100%;
+      padding: 78px 22px 26px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .title{
+      font-size: 28px;
+      font-weight: 1000;
+      letter-spacing: 0.4px;
+      line-height: 1.1;
+      margin: 0;
+      color: #1f1f1f;
+      text-shadow: 0 2px 0 rgba(255,255,255,0.55);
+    }
+
+    .sub{
+      margin-top: 8px;
+      font-size: 14px;
+      font-weight: 900;
+      opacity: 0.85;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .bear{
+      font-size: 18px;
+    }
+
+    .prediction-box{
+      background: rgba(255,255,255,0.76);
+      border: 1px solid rgba(255,90,138,0.24);
+      border-radius: 22px;
+      padding: 18px 16px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.06);
+    }
+
+    .prediction-text{
+      font-size: 18px;
+      line-height: 1.55;
+      font-weight: 900;
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .footer{
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .brand{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 900;
+      opacity: 0.92;
+    }
+
+    .logo{
+      font-weight: 1000;
+      letter-spacing: 1px;
+      background: linear-gradient(135deg, var(--red), var(--pink));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .mini{
+      font-weight: 1000;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(229,57,53,0.12);
+    }
+
+    /* -------- Controls -------- */
+    .controls{
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+    }
+
+    button{
+      flex: 1;
+      border: 0;
+      border-radius: 16px;
+      padding: 14px 14px;
+      font-size: 16px;
+      font-weight: 1000;
+      cursor: pointer;
+      transition: transform 0.08s ease, opacity 0.2s ease;
+    }
+
+    button:active{ transform: scale(0.98); }
+
+    .btn-save{
+      background: linear-gradient(135deg, var(--red), var(--pink));
+      color: white;
+      box-shadow: 0 14px 26px rgba(229,57,53,0.25);
+    }
+
+    .btn-save[disabled]{
+      opacity: 0.65;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .btn-help{
+      background: rgba(255,255,255,0.86);
+      color: #222;
+      border: 1px solid rgba(255,90,138,0.22);
+    }
+
+    /* -------- Error screen -------- */
+    .error-card{
+      width: 100%;
+      max-width: 430px;
+      border-radius: 26px;
+      background: rgba(255,255,255,0.84);
+      border: 1px solid rgba(255,90,138,0.22);
+      box-shadow: var(--shadow);
+      padding: 22px 18px;
+      text-align: center;
+    }
+
+    .error-emoji{
+      font-size: 44px;
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+
+    .error-title{
+      font-size: 20px;
+      font-weight: 1000;
+      margin: 0 0 8px;
+      background: linear-gradient(135deg, var(--red), var(--pink));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .error-text{
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.55;
+      font-weight: 900;
+      opacity: 0.95;
+    }
+
+    .hint{
+      margin-top: 12px;
+      font-size: 13px;
+      opacity: 0.72;
+      font-weight: 900;
+    }
+
+    @media (max-width: 380px){
+      .title{ font-size: 26px; }
+      .prediction-text{ font-size: 17px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap" id="app"></div>
+
+  <script>
+    // ----------------------------
+    // 1) Predictions (placeholder)
+    // ----------------------------
+    const predictions = Array.from({ length: 30 }, (_, i) => `Prediction${String(i+1).padStart(2, '0')}`);
+
+    // ----------------------------
+    // 2) Helpers
+    // ----------------------------
+    function getIdFromURL(){
+      const params = new URLSearchParams(window.location.search);
+      const idStr = params.get("id");
+      if(!idStr) return null;
+
+      const id = Number(idStr);
+      if(!Number.isInteger(id)) return null;
+      if(id < 1 || id > 30) return null;
+
+      return id;
+    }
+
+    function trackPredictionView(id){
+      // GA4 custom event
+      if(typeof gtag === "function"){
+        gtag('event', 'prediction_view', {
+          prediction_id: id,
+          page_path: window.location.pathname + window.location.search
+        });
+      }
+    }
+
+    // ----------------------------
+    // 3) Render
+    // ----------------------------
+    const app = document.getElementById("app");
+    const id = getIdFromURL();
+
+    // RULE: Participants should NOT see a main page.
+    // If no id => show scan-again screen only.
+    if(!id){
+      app.innerHTML = `
+        <div class="error-card">
+          <div class="error-emoji">🧸💗</div>
+          <h1 class="error-title">กรุณาสแกน QR ใหม่</h1>
+          <p class="error-text">
+            ลิงก์นี้ใช้สำหรับดูคำทำนายจาก QR เท่านั้น
+          </p>
+          <div class="hint">สแกนจากการ์ดอีกครั้งเพื่อรับคำทำนายของคุณ</div>
+        </div>
+      `;
+    }else{
+      const predictionText = predictions[id-1];
+
+      // Track
+      trackPredictionView(id);
+
+      app.innerHTML = `
+        <div class="story-frame" id="captureArea">
+          <div class="top-badge">
+            <span class="dot"></span>
+            <span>คำทำนายของคุณ</span>
+          </div>
+
+          <div class="center">
+            <div>
+              <h2 class="title">HUBHUG</h2>
+              <div class="sub">
+                <span class="bear">🧸💗</span>
+                <span>วันนี้มีอะไรจะบอกคุณนะ</span>
+              </div>
+
+              <div style="height:14px"></div>
+
+              <div class="prediction-box">
+                <p class="prediction-text">${escapeHTML(predictionText)}</p>
+              </div>
+            </div>
+
+            <div class="footer">
+              <div class="brand">
+                <div class="mini">#HUBHUG</div>
+                <div class="logo">COZY • LOVE • FUN</div>
+              </div>
+              <div style="font-size:12px; font-weight:900; opacity:0.85; line-height:1.35;">
+                บันทึกรูปนี้แล้วแชร์ลงสตอรี่ได้เลย 🧸💗
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button class="btn-save" id="saveBtn">บันทึกรูป (แนวตั้ง)</button>
+          <button class="btn-help" id="helpBtn">สแกนใหม่</button>
+        </div>
+      `;
+
+      document.getElementById("helpBtn").addEventListener("click", () => {
+        alert("ถ้าต้องการดูคำทำนายใหม่ กรุณาสแกน QR จากการ์ดอีกครั้งนะครับ");
+      });
+
+      document.getElementById("saveBtn").addEventListener("click", async () => {
+        const btn = document.getElementById("saveBtn");
+        btn.disabled = true;
+        btn.textContent = "กำลังสร้างรูป...";
+
+        try{
+          const capture = document.getElementById("captureArea");
+
+          const canvas = await html2canvas(capture, {
+            scale: 3,
+            useCORS: true,
+            backgroundColor: null
+          });
+
+          canvas.toBlob((blob) => {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `HUBHUG_Prediction_${String(id).padStart(2,'0')}.png`;
+            a.click();
+            URL.revokeObjectURL(url);
+          }, "image/png");
+
+          // Track save
+          if(typeof gtag === "function"){
+            gtag('event', 'prediction_save_image', {
+              prediction_id: id
+            });
+          }
+
+        }catch(err){
+          console.error(err);
+          alert("บันทึกรูปไม่สำเร็จ ลองใหม่อีกครั้งนะ");
+        }finally{
+          btn.disabled = false;
+          btn.textContent = "บันทึกรูป (แนวตั้ง)";
+        }
+      });
+    }
+
+    // ----------------------------
+    // 4) Security: escape HTML
+    // ----------------------------
+    function escapeHTML(str){
+      return String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+  </script>
+</body>
+</html>
