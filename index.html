@@ -14,22 +14,16 @@
     gtag('config', 'G-GB86JEEHNY');
   </script>
 
-  <!-- html2canvas สำหรับบันทึกรูป -->
+  <!-- html2canvas -->
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
   <style>
     :root{
       --red: #E33B45;
       --pink: #FF6FA3;
-      --soft-pink: #FFD1E1;
-      --white: #FFFFFF;
-      --ink: #1A1A1A;
-
       --bg1: #FFF5F8;
       --bg2: #FFE3ED;
-
       --shadow: 0 18px 50px rgba(0,0,0,0.12);
-      --radius: 26px;
     }
 
     *{ box-sizing: border-box; }
@@ -38,7 +32,6 @@
       margin: 0;
       font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans Thai", "Noto Sans", sans-serif;
       background: radial-gradient(1200px 900px at 20% 10%, var(--bg2), var(--bg1));
-      color: var(--ink);
     }
 
     .page{
@@ -49,7 +42,6 @@
       padding: 18px;
     }
 
-    /* ====== กล่องรวม UI ====== */
     .shell{
       width: min(430px, 100%);
       display: flex;
@@ -57,7 +49,7 @@
       gap: 14px;
     }
 
-    /* ====== กรอบ Story 9:16 ====== */
+    /* ====== Story 9:16 ====== */
     .story-wrap{
       width: 100%;
       aspect-ratio: 9 / 16;
@@ -69,153 +61,17 @@
         radial-gradient(600px 800px at 50% 10%, rgba(255,111,163,0.25), rgba(255,255,255,0)),
         radial-gradient(900px 900px at 50% 100%, rgba(227,59,69,0.18), rgba(255,255,255,0)),
         linear-gradient(180deg, #FFF7FA, #FFE6F0);
-      border: 1px solid rgba(227,59,69,0.20);
-    }
-
-    /* ชั้นบนสุดใน story */
-    .story{
-      width: 100%;
-      height: 100%;
-      position: relative;
-      padding: 28px 22px 22px 22px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    /* Header */
-    .topline{
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .pill{
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.65);
-      border: 1px solid rgba(227,59,69,0.20);
-      backdrop-filter: blur(10px);
-      font-weight: 700;
-      font-size: 14px;
-    }
-    .dot{
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: var(--red);
-      box-shadow: 0 0 0 4px rgba(227,59,69,0.12);
-    }
-
-    .date{
-      font-weight: 900;
-      font-size: 14px;
-      color: rgba(0,0,0,0.65);
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.45);
-      border: 1px solid rgba(255,111,163,0.18);
-      backdrop-filter: blur(10px);
-      letter-spacing: 0.2px;
-    }
-
-    /* Title */
-    .title{
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-top: 4px;
-    }
-
-    .brand{
-      font-size: 40px;
-      font-weight: 1000;
-      letter-spacing: 0.8px;
-      line-height: 1;
-    }
-
-    .subtitle{
-      font-size: 16px;
-      font-weight: 700;
-      color: rgba(0,0,0,0.72);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    /* กรอบรูปคำทำนาย */
-    .fortune-frame{
-      flex: 1;
-      width: 100%;
-      border-radius: 26px;
-      background: rgba(255,255,255,0.65);
       border: 1px solid rgba(227,59,69,0.18);
-      box-shadow: 0 14px 40px rgba(227,59,69,0.10);
-      padding: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden; /* แต่รูปจะไม่โดนตัดเพราะใช้ contain */
     }
 
-    /* รูปคำทำนาย: สำคัญที่สุด */
+    /* รูปคำทำนาย: แสดงเต็มแบบไม่โดนตัด */
     #fortuneImage{
       width: 100%;
       height: 100%;
-      object-fit: contain;   /* ไม่ตัด */
-      object-position: center;
       display: block;
-      border-radius: 18px;
-      background: rgba(255,255,255,0.40);
-    }
-
-    /* Footer watermark (ไม่ใส่ชื่อ nksjunior) */
-    .footer{
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      font-weight: 900;
-      color: rgba(0,0,0,0.55);
-      font-size: 13px;
-      letter-spacing: 0.2px;
-      padding-bottom: 2px;
-    }
-
-    /* ====== ปุ่มด้านล่างนอก story ====== */
-    .actions{
-      display: flex;
-      gap: 12px;
-      width: 100%;
-    }
-
-    .btn{
-      width: 100%;
-      border: none;
-      cursor: pointer;
-      border-radius: 18px;
-      padding: 16px 18px;
-      font-weight: 900;
-      font-size: 16px;
-      box-shadow: 0 18px 45px rgba(227,59,69,0.25);
-      transition: transform 0.08s ease, filter 0.08s ease;
-    }
-    .btn:active{ transform: translateY(1px); }
-
-    .btn-save{
-      background: linear-gradient(90deg, var(--red), var(--pink));
-      color: white;
-    }
-
-    .hint{
-      text-align: center;
-      font-size: 12px;
-      color: rgba(0,0,0,0.55);
-      margin-top: -6px;
+      object-fit: contain;      /* สำคัญ: ไม่ตัด */
+      object-position: center;
+      background: rgba(255,255,255,0.25);
     }
 
     /* Loader */
@@ -233,10 +89,30 @@
     }
     .loading.show{ display: flex; }
 
-    /* ป้องกันเลือกข้อความ */
-    .noselect{
-      -webkit-user-select: none;
-      user-select: none;
+    /* ปุ่ม */
+    .btn{
+      width: 100%;
+      border: none;
+      cursor: pointer;
+      border-radius: 18px;
+      padding: 16px 18px;
+      font-weight: 900;
+      font-size: 16px;
+      box-shadow: 0 18px 45px rgba(227,59,69,0.25);
+      transition: transform 0.08s ease;
+    }
+    .btn:active{ transform: translateY(1px); }
+
+    .btn-save{
+      background: linear-gradient(90deg, var(--red), var(--pink));
+      color: white;
+    }
+
+    .hint{
+      text-align: center;
+      font-size: 12px;
+      color: rgba(0,0,0,0.55);
+      margin-top: -6px;
     }
   </style>
 </head>
@@ -245,50 +121,21 @@
   <div class="page">
     <div class="shell">
 
-      <!-- ====== ส่วนที่จะถูกเซฟเป็นรูป ====== -->
-      <div id="captureArea" class="story-wrap noselect" aria-label="HUBHUG Story">
+      <!-- ส่วนที่เซฟเป็นรูป -->
+      <div id="captureArea" class="story-wrap">
         <div id="loading" class="loading">กำลังบันทึก...</div>
-
-        <div class="story">
-          <div class="topline">
-            <div class="pill">
-              <span class="dot"></span>
-              <span>คำทำนายของคุณ</span>
-            </div>
-
-            <div class="date">25/02/69</div>
-          </div>
-
-          <div class="title">
-            <div class="brand">HUBHUG</div>
-            <div class="subtitle">🧸💗 วันนี้มีอะไรจะบอกคุณนะ</div>
-          </div>
-
-          <div class="fortune-frame">
-            <img id="fortuneImage" alt="Fortune" />
-          </div>
-
-          <div class="footer">
-            🧸💗 HUBHUG • Your Fate, Your Chance
-          </div>
-        </div>
+        <img id="fortuneImage" alt="Fortune" />
       </div>
 
-      <!-- ปุ่ม -->
-      <div class="actions">
-        <button id="btnSave" class="btn btn-save">บันทึก</button>
-      </div>
-
-      <div class="hint">แนะนำ: บันทึกแล้วแชร์ลงสตอรี่ได้เลย</div>
+      <button id="btnSave" class="btn btn-save">บันทึก</button>
+      <div class="hint">บันทึกแล้วแชร์ลงสตอรี่ได้เลย</div>
 
     </div>
   </div>
 
   <script>
-    // ====== ตั้งค่า ======
     const TOTAL = 30;
 
-    // ใช้ชื่อไฟล์แบบ 2 หลัก: 01.png ... 30.png
     function pad2(n){
       return String(n).padStart(2, '0');
     }
@@ -306,10 +153,9 @@
 
     function setFortuneImage(id){
       const img = document.getElementById("fortuneImage");
-      const file = `images/${pad2(id)}.png`;
-      img.src = file;
+      img.src = `images/${pad2(id)}.png`;
 
-      // Analytics event
+      // GA4
       try{
         gtag('event', 'view_fortune', {
           fortune_id: id,
@@ -321,11 +167,11 @@
     async function saveStoryAsImage(){
       const loading = document.getElementById("loading");
       const captureArea = document.getElementById("captureArea");
+      const img = document.getElementById("fortuneImage");
 
       loading.classList.add("show");
 
-      // รอให้รูปโหลดก่อน
-      const img = document.getElementById("fortuneImage");
+      // รอรูปโหลดก่อน
       if (!img.complete) {
         await new Promise((resolve) => {
           img.onload = resolve;
@@ -333,26 +179,25 @@
         });
       }
 
-      // เรนเดอร์ออกมาเป็น 1080x1920
-      // (ใช้ scale เพิ่มความคม)
+      // แคปเจอร์ UI
       const canvas = await html2canvas(captureArea, {
         backgroundColor: null,
         scale: 3,
         useCORS: true
       });
 
-      // ทำให้ขนาดออกมาเป็น IG Story 1080x1920 แบบชัวร์
+      // ทำไฟล์ออกมา 1080x1920 (IG Story)
       const out = document.createElement("canvas");
       out.width = 1080;
       out.height = 1920;
       const ctx = out.getContext("2d");
 
-      // วาดให้เต็มกรอบโดยไม่บิด
       const ratio = Math.min(out.width / canvas.width, out.height / canvas.height);
       const w = canvas.width * ratio;
       const h = canvas.height * ratio;
       const x = (out.width - w) / 2;
       const y = (out.height - h) / 2;
+
       ctx.drawImage(canvas, x, y, w, h);
 
       // ดาวน์โหลด
@@ -365,7 +210,7 @@
 
       loading.classList.remove("show");
 
-      // Analytics event
+      // GA4
       try{
         gtag('event', 'save_fortune', {
           page_path: window.location.href
@@ -373,16 +218,15 @@
       }catch(e){}
     }
 
-    // ====== Start ======
     (function init(){
       let id = getIdFromUrl();
       if (!id){
-        // ถ้าเข้ามาผิด ให้สุ่มแล้วแก้ URL ให้ถูก
         id = randomId();
         const url = new URL(window.location.href);
         url.searchParams.set("id", id);
         window.history.replaceState({}, "", url.toString());
       }
+
       setFortuneImage(id);
 
       document.getElementById("btnSave").addEventListener("click", saveStoryAsImage);
