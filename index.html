@@ -3,19 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HUBHUG Fortune</title>
+  <title>HUBHUG Admin</title>
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GB86JEEHNY"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-GB86JEEHNY');
-  </script>
+  <!-- สร้าง QR -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 
-  <!-- html2canvas -->
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <!-- zip ดาวน์โหลดทั้งหมด -->
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 
   <style>
     :root{
@@ -23,217 +17,360 @@
       --pink: #FF6FA3;
       --bg1: #FFF5F8;
       --bg2: #FFE3ED;
-      --shadow: 0 18px 50px rgba(0,0,0,0.12);
+      --card: rgba(255,255,255,0.75);
+      --ink: #1A1A1A;
+      --muted: rgba(0,0,0,0.55);
+      --shadow: 0 18px 50px rgba(0,0,0,0.10);
+      --radius: 22px;
     }
 
     *{ box-sizing: border-box; }
     html, body{
-      height: 100%;
       margin: 0;
+      height: 100%;
       font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans Thai", "Noto Sans", sans-serif;
+      color: var(--ink);
       background: radial-gradient(1200px 900px at 20% 10%, var(--bg2), var(--bg1));
     }
 
-    .page{
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 18px;
-      position: relative;
-    }
-
-    .shell{
-      width: min(430px, 100%);
+    .wrap{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 22px 16px 40px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 16px;
     }
 
-    /* Story 9:16 */
-    .story-wrap{
-      width: 100%;
-      aspect-ratio: 9 / 16;
-      border-radius: 32px;
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      position: relative;
-      background:
-        radial-gradient(600px 800px at 50% 10%, rgba(255,111,163,0.25), rgba(255,255,255,0)),
-        radial-gradient(900px 900px at 50% 100%, rgba(227,59,69,0.18), rgba(255,255,255,0)),
-        linear-gradient(180deg, #FFF7FA, #FFE6F0);
+    header{
+      background: var(--card);
       border: 1px solid rgba(227,59,69,0.18);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
-    /* รูปคำทำนาย */
-    #fortuneImage{
-      width: 100%;
-      height: 100%;
-      display: block;
-      object-fit: contain;
-      object-position: center;
-      background: rgba(255,255,255,0.25);
+    .top{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
-    /* ปุ่ม */
+    h1{
+      margin: 0;
+      font-size: 22px;
+      font-weight: 1000;
+      letter-spacing: 0.2px;
+    }
+
+    .sub{
+      margin: 0;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .actions{
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
     .btn{
-      width: 100%;
       border: none;
       cursor: pointer;
-      border-radius: 18px;
-      padding: 16px 18px;
+      padding: 12px 14px;
+      border-radius: 16px;
       font-weight: 900;
-      font-size: 16px;
-      box-shadow: 0 18px 45px rgba(227,59,69,0.25);
+      font-size: 14px;
       transition: transform 0.08s ease;
+      box-shadow: 0 16px 40px rgba(227,59,69,0.18);
     }
     .btn:active{ transform: translateY(1px); }
 
-    .btn-save{
+    .btn-primary{
       background: linear-gradient(90deg, var(--red), var(--pink));
-      color: white;
+      color: #fff;
+    }
+    .btn-ghost{
+      background: rgba(255,255,255,0.8);
+      color: var(--ink);
+      border: 1px solid rgba(227,59,69,0.15);
+      box-shadow: none;
     }
 
-    .hint{
-      text-align: center;
+    .grid{
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid rgba(227,59,69,0.16);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .row{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .id{
+      font-weight: 1000;
+      font-size: 16px;
+    }
+
+    .link{
       font-size: 12px;
-      color: rgba(0,0,0,0.55);
-      margin-top: -6px;
+      color: rgba(0,0,0,0.60);
+      word-break: break-all;
+      line-height: 1.25;
     }
 
-    /* Loading overlay (อยู่นอก captureArea) */
-    .loading-overlay{
-      position: fixed;
-      inset: 0;
-      display: none;
+    .qrbox{
+      width: 100%;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.75);
+      border: 1px solid rgba(0,0,0,0.06);
+      padding: 10px;
+      display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(255,255,255,0.65);
-      backdrop-filter: blur(10px);
-      z-index: 9999;
-      font-weight: 900;
-      color: rgba(0,0,0,0.75);
+      min-height: 220px;
     }
-    .loading-overlay.show{ display: flex; }
+
+    canvas{
+      max-width: 100%;
+      height: auto;
+    }
+
+    .card-actions{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .toast{
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.82);
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 13px;
+      display: none;
+      z-index: 9999;
+    }
+    .toast.show{ display: block; }
   </style>
 </head>
 
 <body>
-  <div class="page">
-    <div class="shell">
+  <div class="wrap">
+    <header>
+      <div class="top">
+        <div>
+          <h1>🧸💗 HUBHUG • Admin (QR Generator)</h1>
+          <p class="sub">
+            หน้านี้สำหรับคนจัดงานเท่านั้น (ไม่มีใครเห็นถ้าไม่รู้ลิงก์)<br/>
+            ใช้สร้างลิงก์ + QR สำหรับ Fortune 1–30
+          </p>
+        </div>
 
-      <!-- ส่วนที่เซฟเป็นรูป (ไม่มี loading อยู่ข้างในแล้ว) -->
-      <div id="captureArea" class="story-wrap">
-        <img id="fortuneImage" alt="Fortune" />
+        <div class="actions">
+          <button class="btn btn-primary" id="btnZip">ดาวน์โหลด QR ทั้งหมด (ZIP)</button>
+          <button class="btn btn-ghost" id="btnCopyAdminLink">คัดลอกลิงก์หน้านี้</button>
+        </div>
       </div>
 
-      <button id="btnSave" class="btn btn-save">บันทึก</button>
-      <div class="hint">บันทึกแล้วแชร์ลงสตอรี่ได้เลย</div>
+      <p class="sub" id="baseInfo"></p>
+    </header>
 
-    </div>
+    <div class="grid" id="grid"></div>
   </div>
 
-  <!-- Loading overlay (อยู่นอก captureArea) -->
-  <div id="loading" class="loading-overlay">กำลังบันทึก...</div>
+  <div class="toast" id="toast">คัดลอกแล้ว</div>
 
   <script>
     const TOTAL = 30;
 
-    function pad2(n){
-      return String(n).padStart(2, '0');
+    // ====== base URL ======
+    // admin.html อยู่ในโฟลเดอร์เดียวกับ index.html
+    // ดังนั้น base = โฟลเดอร์นี้
+    const baseFolderUrl = new URL("./", window.location.href).toString();
+    const fortuneBaseUrl = baseFolderUrl; // index.html อยู่ที่ root ของโฟลเดอร์
+
+    document.getElementById("baseInfo").textContent =
+      "Base URL: " + fortuneBaseUrl;
+
+    function showToast(text){
+      const t = document.getElementById("toast");
+      t.textContent = text;
+      t.classList.add("show");
+      setTimeout(()=> t.classList.remove("show"), 1200);
     }
 
-    function getIdFromUrl(){
-      const url = new URL(window.location.href);
-      const id = parseInt(url.searchParams.get("id"), 10);
-      if (!id || id < 1 || id > TOTAL) return null;
-      return id;
-    }
-
-    function randomId(){
-      return Math.floor(Math.random() * TOTAL) + 1;
-    }
-
-    function setFortuneImage(id){
-      const img = document.getElementById("fortuneImage");
-      img.src = `images/${pad2(id)}.png`;
-
+    async function copyText(text){
       try{
-        gtag('event', 'view_fortune', {
-          fortune_id: id,
-          page_path: window.location.pathname + '?id=' + id
-        });
-      }catch(e){}
+        await navigator.clipboard.writeText(text);
+        showToast("คัดลอกแล้ว");
+      }catch(e){
+        prompt("คัดลอกลิงก์นี้:", text);
+      }
     }
 
-    async function saveStoryAsImage(){
-      const loading = document.getElementById("loading");
-      const captureArea = document.getElementById("captureArea");
-      const img = document.getElementById("fortuneImage");
+    function fortuneUrl(id){
+      return `${fortuneBaseUrl}?id=${id}`;
+    }
 
-      loading.classList.add("show");
+    // สร้าง QR canvas
+    async function makeQrCanvas(text){
+      const canvas = document.createElement("canvas");
+      await QRCode.toCanvas(canvas, text, {
+        errorCorrectionLevel: "M",
+        margin: 2,
+        width: 512
+      });
+      return canvas;
+    }
 
-      // รอให้รูปโหลดก่อน
-      if (!img.complete) {
-        await new Promise((resolve) => {
-          img.onload = resolve;
-          img.onerror = resolve;
-        });
+    function downloadCanvas(canvas, filename){
+      const a = document.createElement("a");
+      a.href = canvas.toDataURL("image/png");
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+
+    // ====== Render cards ======
+    const grid = document.getElementById("grid");
+
+    async function render(){
+      for(let i=1; i<=TOTAL; i++){
+        const url = fortuneUrl(i);
+
+        const card = document.createElement("div");
+        card.className = "card";
+
+        const row = document.createElement("div");
+        row.className = "row";
+
+        const title = document.createElement("div");
+        title.className = "id";
+        title.textContent = `Fortune #${i}`;
+
+        const openBtn = document.createElement("button");
+        openBtn.className = "btn btn-ghost";
+        openBtn.textContent = "เปิดหน้า";
+        openBtn.style.padding = "10px 12px";
+        openBtn.onclick = () => window.open(url, "_blank");
+
+        row.appendChild(title);
+        row.appendChild(openBtn);
+
+        const link = document.createElement("div");
+        link.className = "link";
+        link.textContent = url;
+
+        const qrbox = document.createElement("div");
+        qrbox.className = "qrbox";
+        qrbox.textContent = "กำลังสร้าง QR...";
+
+        const actions = document.createElement("div");
+        actions.className = "card-actions";
+
+        const copyBtn = document.createElement("button");
+        copyBtn.className = "btn btn-primary";
+        copyBtn.textContent = "คัดลอกลิงก์";
+        copyBtn.onclick = () => copyText(url);
+
+        const dlBtn = document.createElement("button");
+        dlBtn.className = "btn btn-ghost";
+        dlBtn.textContent = "ดาวน์โหลด QR";
+        dlBtn.onclick = async () => {
+          const c = await makeQrCanvas(url);
+          downloadCanvas(c, `QR_Fortune_${String(i).padStart(2,'0')}.png`);
+        };
+
+        actions.appendChild(copyBtn);
+        actions.appendChild(dlBtn);
+
+        card.appendChild(row);
+        card.appendChild(link);
+        card.appendChild(qrbox);
+        card.appendChild(actions);
+        grid.appendChild(card);
+
+        // สร้าง QR แสดงในหน้า
+        try{
+          const canvas = await makeQrCanvas(url);
+          qrbox.textContent = "";
+          qrbox.appendChild(canvas);
+        }catch(e){
+          qrbox.textContent = "สร้าง QR ไม่สำเร็จ";
+        }
+      }
+    }
+
+    render();
+
+    // ====== Download ZIP ======
+    document.getElementById("btnZip").addEventListener("click", async () => {
+      const zip = new JSZip();
+
+      showToast("กำลังสร้าง ZIP...");
+
+      for(let i=1; i<=TOTAL; i++){
+        const url = fortuneUrl(i);
+        const canvas = await makeQrCanvas(url);
+
+        const dataUrl = canvas.toDataURL("image/png");
+        const base64 = dataUrl.split(",")[1];
+
+        const filename = `QR_Fortune_${String(i).padStart(2,'0')}.png`;
+        zip.file(filename, base64, {base64: true});
       }
 
-      // รออีกนิดเพื่อให้ UI นิ่ง (กันบางเครื่อง)
-      await new Promise(r => setTimeout(r, 120));
+      const blob = await zip.generateAsync({type:"blob"});
 
-      // แคปเจอร์
-      const canvas = await html2canvas(captureArea, {
-        backgroundColor: null,
-        scale: 3,
-        useCORS: true
-      });
-
-      // ทำออกมาเป็น 1080x1920
-      const out = document.createElement("canvas");
-      out.width = 1080;
-      out.height = 1920;
-      const ctx = out.getContext("2d");
-
-      const ratio = Math.min(out.width / canvas.width, out.height / canvas.height);
-      const w = canvas.width * ratio;
-      const h = canvas.height * ratio;
-      const x = (out.width - w) / 2;
-      const y = (out.height - h) / 2;
-
-      ctx.drawImage(canvas, x, y, w, h);
-
-      // ดาวน์โหลด
       const a = document.createElement("a");
-      a.href = out.toDataURL("image/png");
-      a.download = "HUBHUG_FORTUNE.png";
+      a.href = URL.createObjectURL(blob);
+      a.download = "HUBHUG_QR_ALL.zip";
       document.body.appendChild(a);
       a.click();
       a.remove();
 
-      loading.classList.remove("show");
+      showToast("ดาวน์โหลด ZIP แล้ว");
+    });
 
-      try{
-        gtag('event', 'save_fortune', {
-          page_path: window.location.href
-        });
-      }catch(e){}
-    }
-
-    (function init(){
-      let id = getIdFromUrl();
-      if (!id){
-        id = randomId();
-        const url = new URL(window.location.href);
-        url.searchParams.set("id", id);
-        window.history.replaceState({}, "", url.toString());
-      }
-
-      setFortuneImage(id);
-      document.getElementById("btnSave").addEventListener("click", saveStoryAsImage);
-    })();
+    document.getElementById("btnCopyAdminLink").addEventListener("click", () => {
+      copyText(window.location.href);
+    });
   </script>
 </body>
 </html>
