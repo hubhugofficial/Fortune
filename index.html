@@ -113,11 +113,11 @@
 
     .center{
       height: 100%;
-      padding: 78px 22px 26px;
+      padding: 78px 18px 20px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 18px;
+      gap: 14px;
       position: relative;
       z-index: 2;
     }
@@ -146,22 +146,29 @@
       font-size: 18px;
     }
 
+    /* กล่องที่ใส่รูปคำทำนาย */
     .prediction-box{
       background: rgba(255,255,255,0.76);
       border: 1px solid rgba(255,90,138,0.24);
       border-radius: 22px;
-      padding: 18px 16px;
+      padding: 12px;
       backdrop-filter: blur(10px);
       box-shadow: 0 14px 30px rgba(0,0,0,0.06);
     }
 
-    .prediction-text{
-      font-size: 18px;
-      line-height: 1.55;
-      font-weight: 900;
-      margin: 0;
-      white-space: pre-wrap;
-      word-break: break-word;
+    .prediction-img{
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 18px;
+    }
+
+    .img-loading{
+      font-size: 14px;
+      font-weight: 1000;
+      opacity: 0.85;
+      text-align: center;
+      padding: 18px 12px;
     }
 
     .footer{
@@ -351,6 +358,7 @@
       border: 1px solid rgba(229,57,53,0.12);
       background: rgba(255,255,255,0.8);
       cursor: pointer;
+      white-space: nowrap;
     }
 
     .mini-btn.primary{
@@ -360,13 +368,17 @@
     }
 
     .admin-preview{
-      font-size: 13px;
-      line-height: 1.45;
-      font-weight: 900;
-      opacity: 0.88;
-      white-space: nowrap;
+      width: 100%;
+      border-radius: 14px;
       overflow: hidden;
-      text-overflow: ellipsis;
+      border: 1px solid rgba(255,90,138,0.16);
+      background: rgba(255,255,255,0.65);
+    }
+
+    .admin-preview img{
+      width: 100%;
+      display: block;
+      height: auto;
     }
 
     @media (max-width: 520px){
@@ -379,10 +391,25 @@
   <div class="wrap" id="app"></div>
 
   <script>
+    // =========================================================
+    // (A) ตำแหน่งที่คุณต้องวางรูป (สำคัญ)
+    // =========================================================
+    // ใน GitHub ของคุณ ต้องมีโฟลเดอร์:
+    //
+    // Forture/images/01.png
+    // Forture/images/02.png
+    // ...
+    // Forture/images/30.png
+    //
+    // รูปต้องชื่อ 01.png ถึง 30.png เท่านั้น
+    // =========================================================
+
     // ----------------------------
-    // 1) Predictions (PLACEHOLDER)
+    // 1) Prediction images (30)
     // ----------------------------
-    const predictions = Array.from({ length: 30 }, (_, i) => `Prediction${String(i+1).padStart(2, '0')}`);
+    const predictionImages = Array.from({ length: 30 }, (_, i) => {
+      return `images/${String(i+1).padStart(2, '0')}.png`;
+    });
 
     // ----------------------------
     // 2) Helpers
@@ -405,7 +432,6 @@
     }
 
     function baseURL(){
-      // always keep only origin + pathname (no query)
       return window.location.origin + window.location.pathname;
     }
 
@@ -422,21 +448,11 @@
       }
     }
 
-    function escapeHTML(str){
-      return String(str)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
     async function copyText(text){
       try{
         await navigator.clipboard.writeText(text);
         alert("คัดลอกลิงก์แล้ว");
       }catch(e){
-        // fallback
         const ta = document.createElement("textarea");
         ta.value = text;
         document.body.appendChild(ta);
@@ -445,6 +461,10 @@
         ta.remove();
         alert("คัดลอกลิงก์แล้ว");
       }
+    }
+
+    function safeIdLabel(id){
+      return String(id).padStart(2,'0');
     }
 
     // ----------------------------
@@ -472,19 +492,22 @@
 
       for(let i=1; i<=30; i++){
         const link = makePredictionLink(i);
-        const preview = predictions[i-1];
+        const imgSrc = predictionImages[i-1];
 
         const item = document.createElement("div");
         item.className = "admin-item";
         item.innerHTML = `
           <div class="admin-row">
-            <div class="admin-id">Prediction ${String(i).padStart(2,'0')}</div>
+            <div class="admin-id">Prediction ${safeIdLabel(i)}</div>
             <div class="admin-actions">
               <button class="mini-btn" data-copy="${link}">Copy link</button>
               <button class="mini-btn primary" data-open="${link}">Open</button>
             </div>
           </div>
-          <div class="admin-preview">${escapeHTML(preview)}</div>
+
+          <div class="admin-preview">
+            <img src="${imgSrc}" alt="Prediction ${safeIdLabel(i)}" loading="lazy">
+          </div>
         `;
         grid.appendChild(item);
       }
@@ -518,7 +541,7 @@
       `;
     } else {
       // NORMAL MODE with id
-      const predictionText = predictions[id-1];
+      const predictionImage = predictionImages[id-1];
 
       trackPredictionView(id);
 
@@ -540,7 +563,14 @@
               <div style="height:14px"></div>
 
               <div class="prediction-box">
-                <p class="prediction-text">${escapeHTML(predictionText)}</p>
+                <div class="img-loading" id="imgLoading">กำลังโหลดคำทำนาย...</div>
+                <img
+                  id="predictionImg"
+                  class="prediction-img"
+                  src="${predictionImage}"
+                  alt="Prediction ${safeIdLabel(id)}"
+                  style="display:none;"
+                />
               </div>
             </div>
 
@@ -554,14 +584,29 @@
         </div>
 
         <div class="controls">
-          <button class="btn-save" id="saveBtn">บันทึก</button>
+          <button class="btn-save" id="saveBtn" disabled>บันทึก</button>
         </div>
       `;
 
-      document.getElementById("saveBtn").addEventListener("click", async () => {
-        const btn = document.getElementById("saveBtn");
-        btn.disabled = true;
-        btn.textContent = "กำลังสร้างรูป...";
+      const img = document.getElementById("predictionImg");
+      const loading = document.getElementById("imgLoading");
+      const saveBtn = document.getElementById("saveBtn");
+
+      // รอให้รูปโหลดก่อน ถึงเปิดให้บันทึก
+      img.onload = () => {
+        loading.style.display = "none";
+        img.style.display = "block";
+        saveBtn.disabled = false;
+      };
+
+      img.onerror = () => {
+        loading.textContent = "โหลดรูปไม่สำเร็จ ❌ กรุณาสแกนใหม่";
+        saveBtn.disabled = true;
+      };
+
+      saveBtn.addEventListener("click", async () => {
+        saveBtn.disabled = true;
+        saveBtn.textContent = "กำลังสร้างรูป...";
 
         try{
           const capture = document.getElementById("captureArea");
@@ -576,7 +621,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
-            a.download = `HUBHUG_Prediction_${String(id).padStart(2,'0')}.png`;
+            a.download = `HUBHUG_Prediction_${safeIdLabel(id)}.png`;
             a.click();
             URL.revokeObjectURL(url);
           }, "image/png");
@@ -591,8 +636,8 @@
           console.error(err);
           alert("บันทึกไม่สำเร็จ ลองใหม่อีกครั้งนะ");
         }finally{
-          btn.disabled = false;
-          btn.textContent = "บันทึก";
+          saveBtn.disabled = false;
+          saveBtn.textContent = "บันทึก";
         }
       });
     }
