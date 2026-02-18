@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HUBHUG</title>
+  <title>HUBHUG Fortune</title>
 
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-GB86JEEHNY"></script>
@@ -14,32 +14,34 @@
     gtag('config', 'G-GB86JEEHNY');
   </script>
 
-  <!-- html2canvas (save image) -->
+  <!-- html2canvas สำหรับบันทึกรูป -->
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
   <style>
     :root{
-      --red: #E53935;
-      --pink: #FF5A8A;
-      --softPink: #FFE3EC;
+      --red: #E33B45;
+      --pink: #FF6FA3;
+      --soft-pink: #FFD1E1;
       --white: #FFFFFF;
-      --text: #232323;
-      --shadow: 0 16px 46px rgba(0,0,0,0.14);
+      --ink: #1A1A1A;
+
+      --bg1: #FFF5F8;
+      --bg2: #FFE3ED;
+
+      --shadow: 0 18px 50px rgba(0,0,0,0.12);
+      --radius: 26px;
     }
 
     *{ box-sizing: border-box; }
-
-    body{
+    html, body{
+      height: 100%;
       margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Thai", Arial, sans-serif;
-      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans Thai", "Noto Sans", sans-serif;
+      background: radial-gradient(1200px 900px at 20% 10%, var(--bg2), var(--bg1));
+      color: var(--ink);
+    }
 
-      background:
-        radial-gradient(900px 700px at 20% 10%, rgba(255,255,255,0.95), rgba(255,227,236,0.72)),
-        radial-gradient(900px 700px at 85% 25%, rgba(255,90,138,0.40), rgba(255,255,255,0.0)),
-        radial-gradient(900px 700px at 30% 90%, rgba(229,57,53,0.22), rgba(255,255,255,0.0)),
-        linear-gradient(160deg, #fff 0%, #ffe3ec 40%, #ffd1e1 100%);
-
+    .page{
       min-height: 100vh;
       display: flex;
       align-items: center;
@@ -47,600 +49,344 @@
       padding: 18px;
     }
 
-    .wrap{
-      width: 100%;
-      max-width: 430px;
+    /* ====== กล่องรวม UI ====== */
+    .shell{
+      width: min(430px, 100%);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
     }
 
-    /* -------- Result card (portrait) -------- */
-    .story-frame{
+    /* ====== กรอบ Story 9:16 ====== */
+    .story-wrap{
       width: 100%;
       aspect-ratio: 9 / 16;
-      border-radius: 28px;
+      border-radius: 32px;
       overflow: hidden;
       box-shadow: var(--shadow);
       position: relative;
-
       background:
-        radial-gradient(900px 700px at 20% 15%, rgba(255,255,255,0.95), rgba(255,255,255,0.15)),
-        radial-gradient(900px 700px at 80% 25%, rgba(255,90,138,0.46), rgba(255,255,255,0.0)),
-        radial-gradient(900px 700px at 35% 90%, rgba(229,57,53,0.28), rgba(255,255,255,0.0)),
-        linear-gradient(165deg, rgba(229,57,53,0.40), rgba(255,90,138,0.26)),
-        #fff;
-
-      border: 1px solid rgba(229,57,53,0.14);
+        radial-gradient(600px 800px at 50% 10%, rgba(255,111,163,0.25), rgba(255,255,255,0)),
+        radial-gradient(900px 900px at 50% 100%, rgba(227,59,69,0.18), rgba(255,255,255,0)),
+        linear-gradient(180deg, #FFF7FA, #FFE6F0);
+      border: 1px solid rgba(227,59,69,0.20);
     }
 
-    /* subtle pattern */
-    .story-frame::before{
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0.18;
-      background-image:
-        radial-gradient(circle at 15% 20%, rgba(255,90,138,0.30) 0 2px, transparent 3px),
-        radial-gradient(circle at 75% 25%, rgba(229,57,53,0.25) 0 2px, transparent 3px),
-        radial-gradient(circle at 35% 70%, rgba(255,90,138,0.22) 0 2px, transparent 3px),
-        radial-gradient(circle at 85% 78%, rgba(229,57,53,0.18) 0 2px, transparent 3px);
-      background-size: 220px 220px;
+    /* ชั้นบนสุดใน story */
+    .story{
+      width: 100%;
+      height: 100%;
+      position: relative;
+      padding: 28px 22px 22px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
     }
 
-    .top-badge{
-      position: absolute;
-      top: 18px;
-      left: 18px;
+    /* Header */
+    .topline{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .pill{
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
       padding: 10px 14px;
       border-radius: 999px;
-      font-weight: 900;
-      font-size: 14px;
-      background: rgba(255,255,255,0.78);
+      background: rgba(255,255,255,0.65);
+      border: 1px solid rgba(227,59,69,0.20);
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,90,138,0.25);
-      display: inline-flex;
-      gap: 8px;
-      align-items: center;
-      z-index: 2;
+      font-weight: 700;
+      font-size: 14px;
     }
-
     .dot{
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, var(--red), var(--pink));
-      box-shadow: 0 8px 18px rgba(229,57,53,0.35);
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--red);
+      box-shadow: 0 0 0 4px rgba(227,59,69,0.12);
     }
 
-    .center{
-      height: 100%;
-      padding: 78px 18px 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 14px;
-      position: relative;
-      z-index: 2;
-    }
-
-    .title{
-      font-size: 28px;
-      font-weight: 1000;
-      letter-spacing: 0.4px;
-      line-height: 1.1;
-      margin: 0;
-      color: #1f1f1f;
-      text-shadow: 0 2px 0 rgba(255,255,255,0.55);
-    }
-
-    .sub{
-      margin-top: 8px;
-      font-size: 14px;
+    .date{
       font-weight: 900;
-      opacity: 0.85;
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .bear{
-      font-size: 18px;
-    }
-
-    /* กล่องที่ใส่รูปคำทำนาย */
-    .prediction-box{
-      background: rgba(255,255,255,0.76);
-      border: 1px solid rgba(255,90,138,0.24);
-      border-radius: 22px;
-      padding: 12px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 14px 30px rgba(0,0,0,0.06);
-    }
-
-    .prediction-img{
-      width: 100%;
-      height: auto;
-      display: block;
-      border-radius: 18px;
-    }
-
-    .img-loading{
       font-size: 14px;
-      font-weight: 1000;
-      opacity: 0.85;
-      text-align: center;
-      padding: 18px 12px;
+      color: rgba(0,0,0,0.65);
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.45);
+      border: 1px solid rgba(255,111,163,0.18);
+      backdrop-filter: blur(10px);
+      letter-spacing: 0.2px;
     }
 
-    .footer{
+    /* Title */
+    .title{
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 6px;
+      margin-top: 4px;
     }
 
     .brand{
+      font-size: 40px;
+      font-weight: 1000;
+      letter-spacing: 0.8px;
+      line-height: 1;
+    }
+
+    .subtitle{
+      font-size: 16px;
+      font-weight: 700;
+      color: rgba(0,0,0,0.72);
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      font-size: 13px;
-      font-weight: 900;
-      opacity: 0.92;
-    }
-
-    .logo{
-      font-weight: 1000;
-      letter-spacing: 1px;
-      background: linear-gradient(135deg, var(--red), var(--pink));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    .mini{
-      font-weight: 1000;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.78);
-      border: 1px solid rgba(229,57,53,0.12);
-    }
-
-    /* -------- Controls -------- */
-    .controls{
-      margin-top: 14px;
-      display: flex;
       gap: 10px;
     }
 
-    button{
+    /* กรอบรูปคำทำนาย */
+    .fortune-frame{
       flex: 1;
-      border: 0;
-      border-radius: 16px;
-      padding: 14px 14px;
-      font-size: 16px;
-      font-weight: 1000;
-      cursor: pointer;
-      transition: transform 0.08s ease, opacity 0.2s ease;
+      width: 100%;
+      border-radius: 26px;
+      background: rgba(255,255,255,0.65);
+      border: 1px solid rgba(227,59,69,0.18);
+      box-shadow: 0 14px 40px rgba(227,59,69,0.10);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden; /* แต่รูปจะไม่โดนตัดเพราะใช้ contain */
     }
 
-    button:active{ transform: scale(0.98); }
+    /* รูปคำทำนาย: สำคัญที่สุด */
+    #fortuneImage{
+      width: 100%;
+      height: 100%;
+      object-fit: contain;   /* ไม่ตัด */
+      object-position: center;
+      display: block;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.40);
+    }
+
+    /* Footer watermark (ไม่ใส่ชื่อ nksjunior) */
+    .footer{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-weight: 900;
+      color: rgba(0,0,0,0.55);
+      font-size: 13px;
+      letter-spacing: 0.2px;
+      padding-bottom: 2px;
+    }
+
+    /* ====== ปุ่มด้านล่างนอก story ====== */
+    .actions{
+      display: flex;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .btn{
+      width: 100%;
+      border: none;
+      cursor: pointer;
+      border-radius: 18px;
+      padding: 16px 18px;
+      font-weight: 900;
+      font-size: 16px;
+      box-shadow: 0 18px 45px rgba(227,59,69,0.25);
+      transition: transform 0.08s ease, filter 0.08s ease;
+    }
+    .btn:active{ transform: translateY(1px); }
 
     .btn-save{
-      background: linear-gradient(135deg, var(--red), var(--pink));
+      background: linear-gradient(90deg, var(--red), var(--pink));
       color: white;
-      box-shadow: 0 14px 26px rgba(229,57,53,0.25);
-    }
-
-    .btn-save[disabled]{
-      opacity: 0.65;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
-
-    /* -------- Error screen -------- */
-    .error-card{
-      width: 100%;
-      max-width: 430px;
-      border-radius: 26px;
-      background: rgba(255,255,255,0.84);
-      border: 1px solid rgba(255,90,138,0.22);
-      box-shadow: var(--shadow);
-      padding: 22px 18px;
-      text-align: center;
-    }
-
-    .error-emoji{
-      font-size: 44px;
-      line-height: 1;
-      margin-bottom: 10px;
-    }
-
-    .error-title{
-      font-size: 20px;
-      font-weight: 1000;
-      margin: 0 0 8px;
-      background: linear-gradient(135deg, var(--red), var(--pink));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    .error-text{
-      margin: 0;
-      font-size: 15px;
-      line-height: 1.55;
-      font-weight: 900;
-      opacity: 0.95;
     }
 
     .hint{
-      margin-top: 12px;
-      font-size: 13px;
-      opacity: 0.72;
-      font-weight: 900;
+      text-align: center;
+      font-size: 12px;
+      color: rgba(0,0,0,0.55);
+      margin-top: -6px;
     }
 
-    /* -------- Admin -------- */
-    .admin-card{
-      width: 100%;
-      max-width: 760px;
-      border-radius: 26px;
-      background: rgba(255,255,255,0.84);
-      border: 1px solid rgba(255,90,138,0.22);
-      box-shadow: var(--shadow);
-      padding: 18px;
-    }
-
-    .admin-head{
-      display: flex;
-      justify-content: space-between;
+    /* Loader */
+    .loading{
+      position: absolute;
+      inset: 0;
+      display: none;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 14px;
-      flex-wrap: wrap;
-    }
-
-    .admin-title{
-      font-size: 18px;
-      font-weight: 1000;
-      margin: 0;
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .admin-pill{
-      font-weight: 1000;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.78);
-      border: 1px solid rgba(229,57,53,0.12);
-      font-size: 13px;
-      white-space: nowrap;
-    }
-
-    .admin-grid{
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    .admin-item{
-      border-radius: 18px;
-      padding: 12px;
-      background: rgba(255,255,255,0.72);
-      border: 1px solid rgba(255,90,138,0.18);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .admin-row{
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .admin-id{
-      font-weight: 1000;
-      font-size: 14px;
-    }
-
-    .admin-actions{
-      display: flex;
-      gap: 8px;
-    }
-
-    .mini-btn{
-      border-radius: 12px;
-      padding: 10px 10px;
-      font-size: 13px;
-      font-weight: 1000;
-      border: 1px solid rgba(229,57,53,0.12);
-      background: rgba(255,255,255,0.8);
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    .mini-btn.primary{
-      border: 0;
-      color: white;
-      background: linear-gradient(135deg, var(--red), var(--pink));
-    }
-
-    .admin-preview{
-      width: 100%;
-      border-radius: 14px;
-      overflow: hidden;
-      border: 1px solid rgba(255,90,138,0.16);
+      justify-content: center;
       background: rgba(255,255,255,0.65);
+      backdrop-filter: blur(10px);
+      z-index: 10;
+      font-weight: 900;
+      color: rgba(0,0,0,0.75);
     }
+    .loading.show{ display: flex; }
 
-    .admin-preview img{
-      width: 100%;
-      display: block;
-      height: auto;
-    }
-
-    @media (max-width: 520px){
-      .admin-grid{ grid-template-columns: 1fr; }
+    /* ป้องกันเลือกข้อความ */
+    .noselect{
+      -webkit-user-select: none;
+      user-select: none;
     }
   </style>
 </head>
 
 <body>
-  <div class="wrap" id="app"></div>
+  <div class="page">
+    <div class="shell">
+
+      <!-- ====== ส่วนที่จะถูกเซฟเป็นรูป ====== -->
+      <div id="captureArea" class="story-wrap noselect" aria-label="HUBHUG Story">
+        <div id="loading" class="loading">กำลังบันทึก...</div>
+
+        <div class="story">
+          <div class="topline">
+            <div class="pill">
+              <span class="dot"></span>
+              <span>คำทำนายของคุณ</span>
+            </div>
+
+            <div class="date">25/02/69</div>
+          </div>
+
+          <div class="title">
+            <div class="brand">HUBHUG</div>
+            <div class="subtitle">🧸💗 วันนี้มีอะไรจะบอกคุณนะ</div>
+          </div>
+
+          <div class="fortune-frame">
+            <img id="fortuneImage" alt="Fortune" />
+          </div>
+
+          <div class="footer">
+            🧸💗 HUBHUG • Your Fate, Your Chance
+          </div>
+        </div>
+      </div>
+
+      <!-- ปุ่ม -->
+      <div class="actions">
+        <button id="btnSave" class="btn btn-save">บันทึก</button>
+      </div>
+
+      <div class="hint">แนะนำ: บันทึกแล้วแชร์ลงสตอรี่ได้เลย</div>
+
+    </div>
+  </div>
 
   <script>
-    // =========================================================
-    // (A) ตำแหน่งที่คุณต้องวางรูป (สำคัญ)
-    // =========================================================
-    // ใน GitHub ของคุณ ต้องมีโฟลเดอร์:
-    //
-    // Forture/images/01.png
-    // Forture/images/02.png
-    // ...
-    // Forture/images/30.png
-    //
-    // รูปต้องชื่อ 01.png ถึง 30.png เท่านั้น
-    // =========================================================
+    // ====== ตั้งค่า ======
+    const TOTAL = 30;
 
-    // ----------------------------
-    // 1) Prediction images (30)
-    // ----------------------------
-    const predictionImages = Array.from({ length: 30 }, (_, i) => {
-      return `images/${String(i+1).padStart(2, '0')}.png`;
-    });
+    // ใช้ชื่อไฟล์แบบ 2 หลัก: 01.png ... 30.png
+    function pad2(n){
+      return String(n).padStart(2, '0');
+    }
 
-    // ----------------------------
-    // 2) Helpers
-    // ----------------------------
-    function getIdFromURL(){
-      const params = new URLSearchParams(window.location.search);
-      const idStr = params.get("id");
-      if(!idStr) return null;
-
-      const id = Number(idStr);
-      if(!Number.isInteger(id)) return null;
-      if(id < 1 || id > 30) return null;
-
+    function getIdFromUrl(){
+      const url = new URL(window.location.href);
+      const id = parseInt(url.searchParams.get("id"), 10);
+      if (!id || id < 1 || id > TOTAL) return null;
       return id;
     }
 
-    function isAdminMode(){
-      const params = new URLSearchParams(window.location.search);
-      return params.get("admin") === "1";
+    function randomId(){
+      return Math.floor(Math.random() * TOTAL) + 1;
     }
 
-    function baseURL(){
-      return window.location.origin + window.location.pathname;
+    function setFortuneImage(id){
+      const img = document.getElementById("fortuneImage");
+      const file = `images/${pad2(id)}.png`;
+      img.src = file;
+
+      // Analytics event
+      try{
+        gtag('event', 'view_fortune', {
+          fortune_id: id,
+          page_path: window.location.pathname + '?id=' + id
+        });
+      }catch(e){}
     }
 
-    function makePredictionLink(id){
-      return `${baseURL()}?id=${id}`;
-    }
+    async function saveStoryAsImage(){
+      const loading = document.getElementById("loading");
+      const captureArea = document.getElementById("captureArea");
 
-    function trackPredictionView(id){
-      if(typeof gtag === "function"){
-        gtag('event', 'prediction_view', {
-          prediction_id: id,
-          page_path: window.location.pathname + window.location.search
+      loading.classList.add("show");
+
+      // รอให้รูปโหลดก่อน
+      const img = document.getElementById("fortuneImage");
+      if (!img.complete) {
+        await new Promise((resolve) => {
+          img.onload = resolve;
+          img.onerror = resolve;
         });
       }
-    }
 
-    async function copyText(text){
+      // เรนเดอร์ออกมาเป็น 1080x1920
+      // (ใช้ scale เพิ่มความคม)
+      const canvas = await html2canvas(captureArea, {
+        backgroundColor: null,
+        scale: 3,
+        useCORS: true
+      });
+
+      // ทำให้ขนาดออกมาเป็น IG Story 1080x1920 แบบชัวร์
+      const out = document.createElement("canvas");
+      out.width = 1080;
+      out.height = 1920;
+      const ctx = out.getContext("2d");
+
+      // วาดให้เต็มกรอบโดยไม่บิด
+      const ratio = Math.min(out.width / canvas.width, out.height / canvas.height);
+      const w = canvas.width * ratio;
+      const h = canvas.height * ratio;
+      const x = (out.width - w) / 2;
+      const y = (out.height - h) / 2;
+      ctx.drawImage(canvas, x, y, w, h);
+
+      // ดาวน์โหลด
+      const a = document.createElement("a");
+      a.href = out.toDataURL("image/png");
+      a.download = "HUBHUG_FORTUNE.png";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      loading.classList.remove("show");
+
+      // Analytics event
       try{
-        await navigator.clipboard.writeText(text);
-        alert("คัดลอกลิงก์แล้ว");
-      }catch(e){
-        const ta = document.createElement("textarea");
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand("copy");
-        ta.remove();
-        alert("คัดลอกลิงก์แล้ว");
+        gtag('event', 'save_fortune', {
+          page_path: window.location.href
+        });
+      }catch(e){}
+    }
+
+    // ====== Start ======
+    (function init(){
+      let id = getIdFromUrl();
+      if (!id){
+        // ถ้าเข้ามาผิด ให้สุ่มแล้วแก้ URL ให้ถูก
+        id = randomId();
+        const url = new URL(window.location.href);
+        url.searchParams.set("id", id);
+        window.history.replaceState({}, "", url.toString());
       }
-    }
+      setFortuneImage(id);
 
-    function safeIdLabel(id){
-      return String(id).padStart(2,'0');
-    }
-
-    // ----------------------------
-    // 3) Render
-    // ----------------------------
-    const app = document.getElementById("app");
-    const id = getIdFromURL();
-    const admin = isAdminMode();
-
-    // ADMIN MODE
-    if(admin){
-      app.style.maxWidth = "760px";
-      app.innerHTML = `
-        <div class="admin-card">
-          <div class="admin-head">
-            <h1 class="admin-title">🧸💗 HUBHUG • ADMIN</h1>
-            <div class="admin-pill">25/02/69</div>
-          </div>
-
-          <div class="admin-grid" id="adminGrid"></div>
-        </div>
-      `;
-
-      const grid = document.getElementById("adminGrid");
-
-      for(let i=1; i<=30; i++){
-        const link = makePredictionLink(i);
-        const imgSrc = predictionImages[i-1];
-
-        const item = document.createElement("div");
-        item.className = "admin-item";
-        item.innerHTML = `
-          <div class="admin-row">
-            <div class="admin-id">Prediction ${safeIdLabel(i)}</div>
-            <div class="admin-actions">
-              <button class="mini-btn" data-copy="${link}">Copy link</button>
-              <button class="mini-btn primary" data-open="${link}">Open</button>
-            </div>
-          </div>
-
-          <div class="admin-preview">
-            <img src="${imgSrc}" alt="Prediction ${safeIdLabel(i)}" loading="lazy">
-          </div>
-        `;
-        grid.appendChild(item);
-      }
-
-      grid.addEventListener("click", async (e) => {
-        const btn = e.target.closest("button");
-        if(!btn) return;
-
-        const copy = btn.getAttribute("data-copy");
-        const open = btn.getAttribute("data-open");
-
-        if(copy){
-          await copyText(copy);
-        }
-        if(open){
-          window.open(open, "_blank");
-        }
-      });
-
-    } else if(!id){
-      // NORMAL MODE but NO id
-      app.innerHTML = `
-        <div class="error-card">
-          <div class="error-emoji">🧸💗</div>
-          <h1 class="error-title">กรุณาสแกน QR ใหม่</h1>
-          <p class="error-text">
-            ลิงก์นี้ใช้สำหรับดูคำทำนายจาก QR เท่านั้น
-          </p>
-          <div class="hint">สแกนจากการ์ดอีกครั้งเพื่อรับคำทำนายของคุณ</div>
-        </div>
-      `;
-    } else {
-      // NORMAL MODE with id
-      const predictionImage = predictionImages[id-1];
-
-      trackPredictionView(id);
-
-      app.innerHTML = `
-        <div class="story-frame" id="captureArea">
-          <div class="top-badge">
-            <span class="dot"></span>
-            <span>คำทำนายของคุณ</span>
-          </div>
-
-          <div class="center">
-            <div>
-              <h2 class="title">HUBHUG</h2>
-              <div class="sub">
-                <span class="bear">🧸💗</span>
-                <span>วันนี้มีอะไรจะบอกคุณนะ</span>
-              </div>
-
-              <div style="height:14px"></div>
-
-              <div class="prediction-box">
-                <div class="img-loading" id="imgLoading">กำลังโหลดคำทำนาย...</div>
-                <img
-                  id="predictionImg"
-                  class="prediction-img"
-                  src="${predictionImage}"
-                  alt="Prediction ${safeIdLabel(id)}"
-                  style="display:none;"
-                />
-              </div>
-            </div>
-
-            <div class="footer">
-              <div class="brand">
-                <div class="mini">#HUBHUG</div>
-                <div class="logo">25/02/69</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="controls">
-          <button class="btn-save" id="saveBtn" disabled>บันทึก</button>
-        </div>
-      `;
-
-      const img = document.getElementById("predictionImg");
-      const loading = document.getElementById("imgLoading");
-      const saveBtn = document.getElementById("saveBtn");
-
-      // รอให้รูปโหลดก่อน ถึงเปิดให้บันทึก
-      img.onload = () => {
-        loading.style.display = "none";
-        img.style.display = "block";
-        saveBtn.disabled = false;
-      };
-
-      img.onerror = () => {
-        loading.textContent = "โหลดรูปไม่สำเร็จ ❌ กรุณาสแกนใหม่";
-        saveBtn.disabled = true;
-      };
-
-      saveBtn.addEventListener("click", async () => {
-        saveBtn.disabled = true;
-        saveBtn.textContent = "กำลังสร้างรูป...";
-
-        try{
-          const capture = document.getElementById("captureArea");
-
-          const canvas = await html2canvas(capture, {
-            scale: 3,
-            useCORS: true,
-            backgroundColor: null
-          });
-
-          canvas.toBlob((blob) => {
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = `HUBHUG_Prediction_${safeIdLabel(id)}.png`;
-            a.click();
-            URL.revokeObjectURL(url);
-          }, "image/png");
-
-          if(typeof gtag === "function"){
-            gtag('event', 'prediction_save_image', {
-              prediction_id: id
-            });
-          }
-
-        }catch(err){
-          console.error(err);
-          alert("บันทึกไม่สำเร็จ ลองใหม่อีกครั้งนะ");
-        }finally{
-          saveBtn.disabled = false;
-          saveBtn.textContent = "บันทึก";
-        }
-      });
-    }
+      document.getElementById("btnSave").addEventListener("click", saveStoryAsImage);
+    })();
   </script>
 </body>
 </html>
